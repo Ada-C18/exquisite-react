@@ -3,21 +3,71 @@ import PropTypes from 'prop-types';
 
 import './PlayerSubmissionForm.css';
 
-const PlayerSubmissionForm = () => {
+const buildFormData = (fields) => {
+  // fields.map(field)
+  const data = {};
+
+  for (const field of fields) {
+    if (field.key) {
+      data[field.key] = '';
+    }
+  }
+
+  return data;
+};
+
+const PlayerSubmissionForm = ({ index, sendSubmission, fields }) => {
+
+  const [formData, setFormData] = useState(buildFormData(fields));
+  // const [formData, setFormData] = useState({});
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setFormData(formData => (
+      { ...formData, [name]: value }
+    ));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    sendSubmission(formData);
+
+    setFormData(buildFormData(fields));
+  };
+
   return (
     <div className="PlayerSubmissionForm">
-      <h3>Player Submission Form for Player #{  }</h3>
+      <h3>Player Submission Form for Player #{ index }</h3>
 
-      <form className="PlayerSubmissionForm__form" >
+      <form className="PlayerSubmissionForm__form" onSubmit={handleSubmit} >
 
         <div className="PlayerSubmissionForm__poem-inputs">
 
-          {
-            // Put your form inputs here... We've put in one below as an example
+
+        {
+            fields.map(field => {
+              if (field.key) {
+                // an actual input
+                const {key, placeholder} = field;
+                const value = formData[field.key];
+                return <input
+                  key={key}
+                  name={key}
+                  placeholder={placeholder}
+                  type="text"
+                  value={value} 
+                  className={value || 'PlayerSubmissionFormt__input--invalid'}
+                  onChange={handleChange}
+                  />;
+                  } else {
+                // template text
+                return field;
+              }
+            })
           }
-          <input
-            placeholder="hm..."
-            type="text" />
 
         </div>
 
