@@ -4,11 +4,6 @@ import PlayerSubmissionForm from './PlayerSubmissionForm';
 import FinalPoem from './FinalPoem';
 import RecentSubmission from './RecentSubmission';
 
-const makeLine = (formData) => {
-  const { adj1, noun1, adv, verb, adj2, noun2 } = formData;
-  return `The ${adj1} ${noun1} ${adv} ${verb} the  ${adj2} ${noun2} .`;
-};
-
 const Game = () => {
   const exampleFormat = FIELDS.map((field) => {
     if (field.key) {
@@ -22,8 +17,7 @@ const Game = () => {
   const [done, setDone] = useState(false);
 
   const handleSubmission = (formData) => {
-    const line = makeLine(formData);
-    setLines(lines => [...lines, line]);
+    setLines(lines => [...lines, formData]);
   };
 
   const handleReveal = () => {
